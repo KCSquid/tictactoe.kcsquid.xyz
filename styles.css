@@ -123,7 +123,7 @@ button {
   left: 5%;
   top: 50%;
   transform: translate(-5%, -50%);
-  color: var(--bubble-even);
+  color: var(--strong-color);
   text-shadow: -1px 1px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -131,7 +131,7 @@ button {
   right: 5%;
   top: 50%;
   transform: translate(5%, -50%);
-  color: var(--bubble-odd);
+  color: var(--strong-color);
   text-shadow: -1px 1px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -169,7 +169,6 @@ button {
   text-align: center;
   color: var(--strong-color);
   flex-direction: column;
-  transition: 0.5s ease;
 }
 
 .settingsMenu[showing] {
@@ -201,6 +200,11 @@ button {
   top: 0;
   right: 0;
   margin: 32px;
+  transition: 0.2s ease;
+}
+
+.close-btn:hover {
+  transform: scale(1.15);
 }
 
 input[type="checkbox"] {
@@ -235,4 +239,31 @@ input[type="checkbox"]::before {
 
 input[type="checkbox"]:checked:before {
   transform: translate(-50%, -50%) scale(0.8);
+}
+
+
+input[type="radio"] {
+  appearance: none;
+  background-color: var(--strong-color);
+  margin-right: 1px;
+  font: inherit;
+  color: currentColor;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid var(--strong-color);
+  border-radius: 50%;
+  transform: translateY(0.15em);
+  outline: none;
+}
+
+input[type="radio"]:focus:before {
+  content: "";
+  background-color: var(--bubble-odd);
+  width: 75%;
+  height: 75%;
+  border-radius: 1000px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
 }

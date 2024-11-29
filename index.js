@@ -1,16 +1,19 @@
-let currentTurn = ["X", "O"][Math.round(Math.random() * 1)];
+var player = "X";
+var ai = "O";
+var currentTurn = ["X", "O"][Math.round(Math.random() * 1)];
 var squares = ["", "", "", "", "", "", "", "", ""];
 
+
 const setUp = async () => {
-  currentTurn = ["X", "O"][Math.round(Math.random() * 1)];
+  currentTurn = [player, ai][Math.round(Math.random() * 1)];
   squares = ["", "", "", "", "", "", "", "", ""];
   $("#status").text("");
   for (let i = 0; i < 9; i++) {
     $(`button:input[value="${i}"]`).html("");
   }
 
-  if (currentTurn == "O") {
-    $("#turn").text(`${currentTurn}'s Turn`);
+  if (currentTurn == ai) {
+    $("#turn").text(`${ai}'s Turn`);
     await aiTurn();
     swapTurn();
     return;
@@ -48,21 +51,23 @@ const detectWin = (board) => {
 };
 
 const swapTurn = () => {
-  if (currentTurn == "X") {
-    currentTurn = "O";
+  if (currentTurn == player) {
+    currentTurn = ai;
     $("#turn").text(`${currentTurn}'s Turn`);
   } else {
-    currentTurn = "X";
+    currentTurn = player;
     $("#turn").text(`Your Turn`);
   }
 };
 
 const handleClick = async (value) => {
   const button = $(`button:input[value="${value}"]`);
-  if (currentTurn !== "X") return;
+  console.log(currentTurn, player)
+  if (currentTurn !== player) return;
   if (squares[value] !== "") return;
 
-  button.html('<i class="fa-solid fa-xmark"></i>');
+  console.log(player, ai)
+  button.html(`<i class="fa-solid fa-${player == "X" ? "xmark" : "o"}"></i>`);
   button.attr("content", "");
   squares[value] = currentTurn;
   swapTurn();
@@ -116,7 +121,7 @@ const aiTurn = async () => {
   }
 
   squares[bestMove] = currentTurn;
-  $(`button:input[value="${bestMove}"]`).html('<i class="fa-solid fa-o"></i>');
+  $(`button:input[value="${bestMove}"]`).html(`<i class="fa-solid fa-${ai == "O" ? "o" : "xmark"}"></i>`);
 };
 
 const minimax = (board, depth, isMax) => {
@@ -140,7 +145,7 @@ const minimax = (board, depth, isMax) => {
     for (let i = 0; i < board.length; i++) {
       if (board[i] !== "") continue;
       tempBoard = [...board];
-      tempBoard[i] = currentTurn === "X" ? "O" : "X";
+      tempBoard[i] = currentTurn === player ? ai : player;
       score = minimax(tempBoard, depth + 1, true);
       if (score < bestScore) {
         bestScore = score;
@@ -159,7 +164,24 @@ const toggleSettings = () => {
 };
 
 window.onload = async () => {
-  if (currentTurn == "O") {
+  document.getElementById('playerPieceX').focus()
+  $('input[type=radio][name=player_piece]').change(function() {
+    if (this.value == 'X') {
+        currentTurn = currentTurn == player ? ai : player;
+        player = "X";
+        ai = "O";
+        setUp();
+    }
+    else if (this.value == 'O') {
+        currentTurn = currentTurn == player ? ai : player;
+        player = "O";
+        ai = "X";
+        setUp();
+    }
+    console.log(player, ai)
+
+  });
+  if (currentTurn == ai) {
     $("#turn").text(`${currentTurn}'s Turn`);
     await aiTurn();
     swapTurn();
@@ -167,4 +189,6 @@ window.onload = async () => {
   }
 
   $("#turn").text(`Your Turn`);
+  
 };
+
